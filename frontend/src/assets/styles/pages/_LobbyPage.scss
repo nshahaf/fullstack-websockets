@@ -1,0 +1,19 @@
+@use '../utils' as *;
+
+.lobby-page {
+    .block-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .block-item {
+        cursor: pointer;
+        margin-inline: 10px;
+        width: 300px;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        background-color: $clr02;
+        text-align: left;
+    }
+}
