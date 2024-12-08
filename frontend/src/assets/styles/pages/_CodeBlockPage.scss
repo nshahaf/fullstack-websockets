@@ -1,0 +1,9 @@
+.code-block-page {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .code-editor {
+        margin-inline: auto;
+    }
+}

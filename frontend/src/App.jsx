@@ -21,7 +21,7 @@ function App() {
 }
 
 function NotFoundPage() {
-  return <HomePage />;
+  return <LobbyPage />;
 }
 
 export default App
