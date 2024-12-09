@@ -1,26 +1,24 @@
-import Editor from '@monaco-editor/react';
+import { Editor } from "@monaco-editor/react";
 
-export default function CodeEditor({ code, setCode }) {
-
+export default function CodeOutput({ output }) {
 
     return (
-        <div className="code-editor">
+        <div className="code-output">
             <Editor
                 defaultLanguage="javascript"
                 theme="vs-dark"
                 width="100%"
                 height="100%"
-                value={code}
-                onChange={(code) => setCode(code)}
+                initialValue="//Run code to see the result"
+                value={output}
                 options={{
                     minimap: {
                         enabled: false
                     },
                     scrollBeyondLastLine: false,
-                    readOnly: false,
+                    readOnly: true,
                 }}
             />
         </div>
     )
 }
-

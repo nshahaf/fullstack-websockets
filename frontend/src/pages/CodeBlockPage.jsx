@@ -1,39 +1,50 @@
 import { useParams } from "react-router-dom"
-import CodeEditor from "../components/CodeEditor";
 import { useEffect, useState } from "react";
-import { fetchCodeBlock } from "../services/blockService.js";
+import { blockService } from "../services/blockService.js";
 
+import CodeEditor from "../components/CodeEditor";
+import CodeOutput from "../components/CodeOutput.jsx";
 
 export default function CodeBlockPage() {
-    const { codeBlock } = useParams();
-    const [initialCode, setInitialCode] = useState('');
-    const [submitedCode, setSubmitedCode] = useState('');
+    const { id } = useParams();
+    const [codeBlock, setCodeBlock] = useState(null)
+    const [code, setCode] = useState('');
+    const [output, setOutput] = useState('');
 
     useEffect(() => {
-        fetchCodeBlock(codeBlock)
-            .then(fetchedCode => setInitialCode(fetchedCode));
-    }, [codeBlock]);
+        blockService.getCodeBlock(id)
+            .then(res => {
+                setCodeBlock(res)
+                setCode(res.codeTemplate)
+            })
+    }, [id]);
 
-    const handleSubmit = (code) => {
-        setSubmitedCode(code);
-        console.log(submitedCode)
+
+    const handleSubmit = async () => {
+        const response = await fetch(blockService.executeRequest(code));
+        const data = await response.json();
+        if (data.run.code === 0) {
+            setOutput(data.run.output)
+        }
+        if (data.run.code === 1) {
+            console.log('Error:' + data.run.output);
+            setOutput('//Error executing code');
+        }
     }
+
 
     return (
         <div className="page code-block-page">
-            <h1 className="title">{codeBlock}</h1>
-            <h2 className="description"> Fix the following code:</h2>
-            <CodeEditor initialValue={initialCode} submit={handleSubmit} />
+            <h1 className="title">{codeBlock ? codeBlock.title : 'Loading...'}</h1>
+            <p className="description">
+                {codeBlock?.description}
+            </p>
+            <div className="excerise-container">
+                <CodeEditor code={code} setCode={setCode} />
+                <CodeOutput output={output} />
+            </div>
+            <button type="submit" onClick={handleSubmit} className="submit-btn">Run Code</button>
         </div>
     )
 }
 
-
-//TODO//: contain title: CodeBlock name
-//TODO//: a text editor with JS syntax highlight
-//TODO: the text editor should contain the codeblock initial template
-//TODO: contain a role indicator (student / mentor)
-//TODO: should be read-only for mentor and editable for students
-//TODO: If the mentor leaves the code-block page, students should be redirected to the lobby page, and any written code should be deleted.
-//TODO: At any given time, each user can see how many students are in the room
-//TODO: once the student changes the code to be equal to the solution, show a big smiley face on the screen :)

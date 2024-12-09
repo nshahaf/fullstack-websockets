@@ -1,4 +1,6 @@
 .app-layout {
+    display: flex;
+    flex-direction: column;
 
     // @include media('sm') {}
 

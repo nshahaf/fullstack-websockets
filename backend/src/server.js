@@ -10,6 +10,7 @@ import { connectDatabase } from './lib/db.js';
 
 //routes
 import authRoutes from './api/auth/auth.route.js'
+import codeBlockRoutes from './api/codeBlock/codeBlock.route.js'
 
 dotenv.config()
 
@@ -34,6 +35,7 @@ if (process.env.NODE_ENV === 'production') {
 app.use(logger)
 
 app.use("/api/auth", authRoutes)
+app.use("/api/codeblocks", codeBlockRoutes)
 
 //unhandled routes
 app.get('/**', (req, res) => {

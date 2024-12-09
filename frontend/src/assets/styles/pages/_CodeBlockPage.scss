@@ -3,7 +3,46 @@
     flex-direction: column;
     gap: 1rem;
 
-    .code-editor {
-        margin-inline: auto;
+    .title {
+        text-align: center;
     }
+
+    .submit-btn {
+        padding: 5px 10px;
+        align-self: center;
+
+    }
+
+    .description {
+        padding-inline: 1rem;
+        align-self: left;
+    }
+
+    .excerise-container {
+        $editor-height: 300px;
+        $editor-width: 50%;
+
+        width: 100%;
+        display: flex;
+        padding-inline: 1rem;
+        gap: 1px;
+        justify-content: center;
+        flex-direction: row;
+
+        .code-editor {
+            width: $editor-width;
+            height: $editor-height;
+        }
+
+        .code-output {
+            width: $editor-width;
+            height: $editor-height;
+        }
+
+
+    }
+
+
+
+
 }

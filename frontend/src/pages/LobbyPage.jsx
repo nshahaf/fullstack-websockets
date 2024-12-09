@@ -2,20 +2,14 @@ import { useNavigate } from "react-router-dom";
 import CodeEditor from "../components/CodeEditor";
 import { useState } from "react";
 
-export default function LobbyPage() {
+
+export default function LobbyPage({ codeBlocks = [] }) {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
-  const codeBlocks = [
-    "Async case",
-    "Promise chaining",
-    "API request handling",
-    "Error handling"
-  ];
-
-  const handleRedirect = (blockName) => {
+  const handleRedirect = (blockId) => {
     // Redirects to the code block page corresponding to the clicked item
-    navigate(`/code-block/${blockName.toLowerCase().replace(" ", "-")}`);
+    navigate(`/code-block/${blockId}`);
   }
 
   const handleClick = () => {
@@ -30,13 +24,10 @@ export default function LobbyPage() {
 
   return (
     <div className="page lobby-page">
-      <h1>Choose code block</h1>
+      <h1>Choose a code block</h1>
       <ul className="block-list">
-        {codeBlocks.map((blockName, index) => (
-          <li className="block-item" key={index} onClick={() => handleRedirect(blockName)}>
-            {blockName}
-          </li>
-
+        {codeBlocks.map((block) => (
+          <li className="block-item" key={block._id} onClick={() => handleRedirect(block._id)}>{block.title}</li>
         ))}
       </ul>
       <button onClick={handleClick}>Create Code block</button>
