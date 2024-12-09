@@ -16,14 +16,14 @@ export const blockService = {
 
 //Create
 async function createCodeBlock(codeBlock) {
-  const response = await axios.post(`/codeblocks/`, codeBlock);
+  const response = await axios.post(`/codeblocks`, codeBlock);
   const savedCodeBlock = response.data
   return savedCodeBlock
 }
 
 //Read
 async function getCodeBlocks() {
-  const response = await axios.get('/codeblocks/')
+  const response = await axios.get('/codeblocks')
   const codeBlocks = response.data
   return codeBlocks;
 }

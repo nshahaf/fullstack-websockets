@@ -43,11 +43,12 @@ export const getCodeBlocks = async (req, res) => {
 
 //Read one by id
 export const getCodeBlockById = async (req, res) => {
+    const { id } = req.params
     try {
-        const codeBlock = await CodeBlock.findById(req.params.id)
+        const codeBlock = await CodeBlock.findById(id)
         if (!codeBlock) return res.status(404).send('codeBlock not found') //404 for not found
 
-        res.status(200).json(codeBlock)
+        res.json(codeBlock)
     } catch (error) {
         console.log("Error in codeBlock controller", error)
         res.status(500).send("Internal server error")

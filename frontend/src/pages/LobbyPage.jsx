@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import CodeEditor from "../components/CodeEditor";
 import { useState } from "react";
+import RoleLogic from "../components/Role";
 
 
 export default function LobbyPage({ codeBlocks = [] }) {
@@ -32,6 +33,7 @@ export default function LobbyPage({ codeBlocks = [] }) {
       </ul>
       <button onClick={handleClick}>Create Code block</button>
       {isOpen && <CodeEditor submit={handleSubmit} />}
+      <RoleLogic />
     </div>
   )
 }

@@ -6,7 +6,7 @@ const logger = (req, res, next) => {
     res.on('finish', () => {
         const logData = `${new Date().toLocaleString()} - ${req.method} ${req.protocol}://${req.get('host')}${req.originalUrl} - ${res.statusCode}, ${res.statusMessage}`;
         let coloredLogData = logData;
-        if (res.statusCode >= 200 && res.statusCode < 300) {
+        if (res.statusCode >= 200 && res.statusCode < 300 || res.statusCode === 304) {
             // Green for successful responses
             coloredLogData = chalk.green(logData);
         } else if (res.statusCode >= 400 && res.statusCode < 500) {

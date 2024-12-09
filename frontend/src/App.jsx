@@ -1,14 +1,11 @@
-// import reactLogo from './assets/icons/react.svg'
-// import viteLogo from '/vite.svg'
-import { Routes, Route } from 'react-router-dom';
-import LobbyPage from './pages/LobbyPage';
-import CodeBlockPage from './pages/CodeBlockPage';
+import { Routes, Route } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import LobbyPage from './pages/LobbyPage'
+import CodeBlockPage from './pages/CodeBlockPage'
+import Header from './components/Header'
+import { blockService } from './services/blockService.js'
 
 import './assets/styles/main.scss'
-import Header from './components/Header';
-import { blockService } from './services/blockService.js';
-import { useEffect, useState } from 'react';
-
 
 function App() {
   const [codeBlocks, setCodeBlocks] = useState([]);
