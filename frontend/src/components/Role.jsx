@@ -1,23 +1,25 @@
+
 import { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:3000'); //TODO: handle production/development case
+const socket = io('http://localhost:3000', { withCredentials: true }); //TODO: handle production/development case
 
-const RoleLogic = () => {
+
+export default function Role() {
     const [role, setRole] = useState(null);
-    const [users, setUsers] = useState([]);
-    const [roles, setRoles] = useState({});
+    const [users, setUsers] = useState([])
+
 
     useEffect(() => {
         // Listen for role assignment from the server
-        socket.on('roleAssigned', (assignedRole) => {
-            setRole(assignedRole);
+        socket.on('roleAssigned', (socketUser) => {
+            console.log(socketUser)
+            setRole(socketUser.role);
         });
 
         // Listen for user list updates
-        socket.on('userListUpdate', ({ users, roles }) => {
+        socket.on('userListUpdate', (users) => {
             setUsers(users);
-            setRoles(roles);
         });
 
         return () => {
@@ -27,35 +29,8 @@ const RoleLogic = () => {
     }, []);
 
     return (
-        <div>
-            <h2>User Roles</h2>
-            <ul>
-                {users.map((user) => (
-                    <li key={user}>
-                        User {user} - {roles[user] === 'mentor' ? 'Mentor' : 'Student'}
-                    </li>
-                ))}
-            </ul>
+        <li className='Role'>{role}</li>
+    )
+}
 
-            <p>
-                You are the {role === 'mentor' ? 'Mentor' : 'Student'}.
-            </p>
 
-            {/* Display checkboxes */}
-            <div>
-                <label>
-                    Mentor Role
-                    <input type="checkbox" checked={role === 'mentor'} disabled />
-                </label>
-            </div>
-            <div>
-                <label>
-                    Student Role
-                    <input type="checkbox" checked={role === 'student'} disabled />
-                </label>
-            </div>
-        </div>
-    );
-};
-
-export default RoleLogic;
