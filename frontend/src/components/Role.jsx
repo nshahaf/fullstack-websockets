@@ -1,11 +1,9 @@
 
 import { useEffect, useState } from 'react';
-import io from 'socket.io-client';
-
-const socket = io('http://localhost:3000', { withCredentials: true }); //TODO: handle production/development case
-
+import { useSocket } from '../hooks/useSocket';
 
 export default function Role() {
+    const socket = useSocket()
     const [role, setRole] = useState(null);
     const [users, setUsers] = useState([])
 
