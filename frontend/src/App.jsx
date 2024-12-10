@@ -6,13 +6,27 @@ import Header from './components/Header'
 import { blockService } from './services/blockService.js'
 
 import './assets/styles/main.scss'
+import { useSocket } from './hooks/useSocket.js'
+import { socketListeners } from './sockets/client.js'
 
 function App() {
+  const socket = useSocket()
   const [codeBlocks, setCodeBlocks] = useState([]);
 
   useEffect(() => {
     blockService.getCodeBlocks()
       .then(res => setCodeBlocks(res))
+
+  }, []);
+
+  useEffect(() => {
+    // Set up listeners
+    socket.on('message', socketListeners.onMessage)
+
+    // Clean up listeners when the component unmounts
+    return () => {
+      socket.off(('message', socketListeners.onMessage))
+    }
   }, []);
 
   return (

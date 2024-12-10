@@ -12,21 +12,36 @@ const socketHandler = (io) => {
         console.log('A user connected:', socket.id);
 
         //Joining a room
-        socket.on('joinRoom', (roomName) => {
-            socket.join(roomName)
-            console.log(`${socket.id} joined room: ${roomName}`)
+        socket.on('joinRoom', (roomTitle) => {
+            socket.join(roomTitle)
+            console.log(`User: ${socket.id} joined room: ${roomTitle}`)
+
+            //Notify the current user
+            socket.emit('message', `you have joined "${roomTitle}" room`)
 
             //Notify others in the room
-            socket.to(roomName).emit('messege', `${socket.id} joined the room`)
+            socket.to(roomTitle).emit('message', `${socket.id} joined the room`)
         })
 
         //Leaving a room
-        socket.on('leaveRoom', (roomName) => {
-            socket.leave(roomName)
-            console.log(`${socket.id} left room: ${roomName}`)
+        socket.on('leaveRoom', (roomTitle) => {
+            socket.leave(roomTitle)
+            console.log(`${socket.id} left room: ${roomTitle}`)
 
             //Notify others in the room
-            socket.to(roomName).emit('messege', `${socket.id} left the room`)
+            socket.to(roomTitle).emit('message', `${socket.id} left the room`)
+        })
+
+        socket.on("backToLobby", () => {
+            const rooms = Array.from(socket.rooms); // Get all rooms the socket is in (include self)
+            rooms.forEach((room) => {
+                if (room !== socket.id) { // Skip the socket's own room
+                    socket.leave(room)
+                    console.log(`Socket ${socket.id} left room: ${room}`)
+                }
+            })
+
+            socket.emit("message", `You have been removed from all rooms.`)
         })
 
 

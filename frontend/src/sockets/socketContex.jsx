@@ -1,5 +1,5 @@
-import { createContext, useContext, useEffect } from 'react'
-import socket from './client';
+import { createContext, useEffect } from 'react'
+import { socket } from './client';
 
 
 // Create the SocketContext
