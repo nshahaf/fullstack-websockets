@@ -1,12 +1,13 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Role from "./Role";
-import { useSocket } from "../hooks/useSocket";
+import { socketActions } from "../sockets/client";
 
 export default function Header() {
-  const socket = useSocket()
+  const navigate = useNavigate()
 
-  const handleClick = () => {
-    socket.emit('backToLobby')
+  const handleRedirect = () => {
+    socketActions.leaveRoom()
+    navigate('/')
   }
 
 
@@ -15,7 +16,7 @@ export default function Header() {
       <h1>CodeBlocks</h1>
       <ul className="clean-list nav-list">
         <Role />
-        <Link to={'/'} onClick={handleClick} className="nav-item">Lobby</Link>
+        <li onClick={handleRedirect} className="nav-item">Lobby</li>
       </ul>
     </div>
   )

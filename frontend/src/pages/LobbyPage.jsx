@@ -5,7 +5,7 @@ export default function LobbyPage({ codeBlocks = [] }) {
   const navigate = useNavigate();
 
   const handleRedirect = (blockId, blockTitle) => {
-    socketActions.joinRoom(blockTitle)
+    socketActions.joinRoom(blockId, blockTitle)
     navigate(`/code-block/${blockId}`)
   }
 

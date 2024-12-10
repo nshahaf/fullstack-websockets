@@ -22,10 +22,12 @@ function App() {
   useEffect(() => {
     // Set up listeners
     socket.on('message', socketListeners.onMessage)
+    socket.on('roleAssigned', socketListeners.onRoleAssigned)
 
     // Clean up listeners when the component unmounts
     return () => {
       socket.off(('message', socketListeners.onMessage))
+      socket.off(('roleAssigned', socketListeners.onRoleAssigned))
     }
   }, []);
 

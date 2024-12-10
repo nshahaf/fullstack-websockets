@@ -9,11 +9,6 @@ export default function Role() {
 
 
     useEffect(() => {
-        // Listen for role assignment from the server
-        socket.on('roleAssigned', (socketUser) => {
-            console.log(socketUser)
-            setRole(socketUser.role);
-        });
 
         // Listen for user list updates
         socket.on('userListUpdate', (users) => {
@@ -21,7 +16,6 @@ export default function Role() {
         });
 
         return () => {
-            socket.off('roleAssigned');
             socket.off('userListUpdate');
         };
     }, []);

@@ -1,10 +1,10 @@
-let users = []
-const MENTOR = 'Mentor'
-const STUDENT = 'Student'
-const createUser = (socketId, role) => ({ socketId: socketId, role: role })
-const filteredUsers = (socketId) => users.filter(user => user.socketId !== socketId)
-const getUser = (socketId) => users.filter(user => user.socketId === socketId).at(0)
 
+// Store room-specific users and their roles
+const roomUsers = {}; // { roomTitle: [{ socketId, role }] }
+
+// Roles constants
+const MENTOR = "mentor";
+const STUDENT = "student";
 
 const socketHandler = (io) => {
     // Handle user connection
@@ -12,26 +12,50 @@ const socketHandler = (io) => {
         console.log('A user connected:', socket.id);
 
         //Joining a room
-        socket.on('joinRoom', (roomTitle) => {
-            socket.join(roomTitle)
-            console.log(`User: ${socket.id} joined room: ${roomTitle}`)
+        socket.on('joinRoom', ({ roomId, roomTitle }) => {
+            // If room does not exist, create it
+            if (!roomUsers[roomId]) {
+                roomUsers[roomId] = []
+            }
+
+            // Assign user role (mentor for the first user, student for others)
+            const usersInRoom = roomUsers[roomId]
+            let role = STUDENT
+
+            if (usersInRoom.length === 0) {
+                role = MENTOR; // First user becomes the mentor
+            }
+            // Add the user with their role
+            usersInRoom.push({ socketId: socket.id, role });
+
+            // Add the user to the room
+            socket.join(roomId)
+            console.log(`User: ${socket.id} joined "${roomTitle}" as a ${role}`)
 
             //Notify the current user
-            socket.emit('message', `you have joined "${roomTitle}" room`)
-
+            socket.emit('message', `You have joined "${roomTitle}" as a ${role}`)
+            socket.emit('roleAssigned', { role, roomId })
             //Notify others in the room
-            socket.to(roomTitle).emit('message', `${socket.id} joined the room`)
+            socket.to(roomId).emit('message', `${socket.id} has joined as a ${role}`)
         })
 
-        //Leaving a room
-        socket.on('leaveRoom', (roomTitle) => {
-            socket.leave(roomTitle)
-            console.log(`${socket.id} left room: ${roomTitle}`)
+        // Leave room and clean up users
+        socket.on('leaveRoom', (roomId) => {
+            if (roomUsers[roomId]) {
+                // Remove user from the room's users list
+                roomUsers[roomId] = roomUsers[roomId].filter(user => user.socketId !== socket.id);
 
-            //Notify others in the room
-            socket.to(roomTitle).emit('message', `${socket.id} left the room`)
-        })
+                // Notify the room about the user leaving
+                socket.to(roomId).emit('message', `${socket.id} has left the room`);
 
+                socket.emit("message", `You left the room`)
+                socket.emit('roleAssigned', { roomId: null, role: null })
+                // Leave the room
+                socket.leave(roomId);
+            }
+        });
+
+        //Back to lobby
         socket.on("backToLobby", () => {
             const rooms = Array.from(socket.rooms); // Get all rooms the socket is in (include self)
             rooms.forEach((room) => {
@@ -40,37 +64,16 @@ const socketHandler = (io) => {
                     console.log(`Socket ${socket.id} left room: ${room}`)
                 }
             })
-
             socket.emit("message", `You have been removed from all rooms.`)
+            socket.emit('roleAssigned', { roomId: null, role: null })
+
         })
-
-
-        // Assign the first user as mentor, others as students
-        if (users.length === 0) {
-            users.push(createUser(socket.id, MENTOR))
-        } else {
-            users.push(createUser(socket.id, STUDENT))
-        }
-
-        socket.emit('roleAssigned', getUser(socket.id)) //socketId and role to the new user
-        io.emit('userListUpdate', users); //emit updated users list to everyone
-
-
 
         // Handle user disconnect
         socket.on('disconnect', () => {
             console.log('A user disconnected:', socket.id)
-
-            // Remove the user from the list
-            users = filteredUsers(socket.id)
-
-
-        });
-    });
-
-
-};
-
-
+        })
+    })
+}
 
 export default socketHandler;
