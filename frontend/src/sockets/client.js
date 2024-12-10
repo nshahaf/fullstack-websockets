@@ -1,6 +1,7 @@
-const userState = { roomId: null, role: null }
-
 import { io } from 'socket.io-client'
+import { toast } from 'react-hot-toast'
+
+const userState = { roomId: null, role: null }
 
 const socket = io('http://localhost:3000', {
     withCredentials: true,
@@ -13,11 +14,16 @@ const socketActions = { //Emitting Events
     leaveRoom: () => socket.emit('leaveRoom', userState.roomId), // Emit the "joinRoom" event
     backToLobby: () => socket.emit('backToLobby'), // Emit the "backToLobby" event
     sendMessage: (message) => socket.emit('sendMessage', message), // Emit the "sendMessage" event
+    getUserRole: () => userState.role
 }
 
 const socketListeners = {
     onMessage: (message) => {
-        console.log(message);
+        // console.log(message);
+        toast.success(message, {
+            duration: 2000,
+        })
+
     },
     onRoleAssigned: (user) => {
         console.log(user)

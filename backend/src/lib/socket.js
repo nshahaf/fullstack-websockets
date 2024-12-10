@@ -3,8 +3,8 @@
 const roomUsers = {}; // { roomTitle: [{ socketId, role }] }
 
 // Roles constants
-const MENTOR = "mentor";
-const STUDENT = "student";
+const MENTOR = "Mentor";
+const STUDENT = "Student";
 
 const socketHandler = (io) => {
     // Handle user connection
@@ -30,13 +30,13 @@ const socketHandler = (io) => {
 
             // Add the user to the room
             socket.join(roomId)
-            console.log(`User: ${socket.id} joined "${roomTitle}" as a ${role}`)
+            console.log(`User: ${socket.id} joined "${roomTitle}" as ${role}`)
 
             //Notify the current user
-            socket.emit('message', `You have joined "${roomTitle}" as a ${role}`)
+            socket.emit('message', `You joined "${roomTitle}" as ${role}`)
             socket.emit('roleAssigned', { role, roomId })
             //Notify others in the room
-            socket.to(roomId).emit('message', `${socket.id} has joined as a ${role}`)
+            socket.to(roomId).emit('message', `${socket.id} has joined as ${role}`)
         })
 
         // Leave room and clean up users
@@ -55,23 +55,17 @@ const socketHandler = (io) => {
             }
         });
 
-        //Back to lobby
-        socket.on("backToLobby", () => {
-            const rooms = Array.from(socket.rooms); // Get all rooms the socket is in (include self)
-            rooms.forEach((room) => {
-                if (room !== socket.id) { // Skip the socket's own room
-                    socket.leave(room)
-                    console.log(`Socket ${socket.id} left room: ${room}`)
-                }
-            })
-            socket.emit("message", `You have been removed from all rooms.`)
-            socket.emit('roleAssigned', { roomId: null, role: null })
-
-        })
-
         // Handle user disconnect
         socket.on('disconnect', () => {
-            console.log('A user disconnected:', socket.id)
+            const rooms = Array.from(socket.rooms); // Get all rooms the socket is in (include self)
+            rooms.forEach((room) => {
+                if (room === socket.id) return //skip the socket own room
+                if (roomUsers[room]) roomUsers[room] = roomUsers[room].filter(user => user.socketId !== socket.id) // If the room exists in roomUsers, remove the socket from the room
+
+                socket.leave(room)
+                console.log(`Socket ${socket.id} left room: ${room}`);
+            })
+            console.log('A user disconnected:', socket.id);
         })
     })
 }

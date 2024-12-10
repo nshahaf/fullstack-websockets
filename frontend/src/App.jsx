@@ -8,6 +8,7 @@ import { blockService } from './services/blockService.js'
 import './assets/styles/main.scss'
 import { useSocket } from './hooks/useSocket.js'
 import { socketListeners } from './sockets/client.js'
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   const socket = useSocket()
@@ -40,6 +41,7 @@ function App() {
           <Route path="/code-block/:id" element={<CodeBlockPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
+        <Toaster />
       </div>
     </>
   )

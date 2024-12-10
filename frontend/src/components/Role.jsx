@@ -5,20 +5,16 @@ import { useSocket } from '../hooks/useSocket';
 export default function Role() {
     const socket = useSocket()
     const [role, setRole] = useState(null);
-    const [users, setUsers] = useState([])
-
 
     useEffect(() => {
-
-        // Listen for user list updates
-        socket.on('userListUpdate', (users) => {
-            setUsers(users);
-        });
-
+        socket.on('roleAssigned', (user) => {
+            setRole(user.role)
+        })
         return () => {
-            socket.off('userListUpdate');
-        };
-    }, []);
+            socket.off('roleAssigned')
+        }
+
+    }, [socket])
 
     return (
         <li className='Role'>{role}</li>

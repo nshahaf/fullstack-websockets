@@ -10,7 +10,6 @@ export default function Header() {
     navigate('/')
   }
 
-
   return (
     <div className='header'>
       <h1>CodeBlocks</h1>
