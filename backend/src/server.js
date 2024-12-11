@@ -8,7 +8,7 @@ import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 
-import logger from './middleware/logger.js';
+// import logger from './middleware/logger.js';
 import { connectDatabase } from './lib/db.js';
 
 //routes
@@ -49,7 +49,7 @@ if (process.env.NODE_ENV === 'production') {
 const io = new Server(server, { cors: corsOptions })
 socketHandler(io)
 
-app.use(logger)
+// app.use(logger)
 
 app.use("/api/codeblocks", codeBlockRoutes)
 

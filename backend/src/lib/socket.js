@@ -35,7 +35,7 @@ const socketHandler = (io) => {
             io.to(roomId).emit('updateStudentCounter', { roomId, userCount }) // updated room users count to all clients in the room
 
             socket.emit('roleAssigned', { role, roomId }) //update role
-            console.log(`joinRoom: User: ${clientId} joined "${roomTitle}" as ${role}`) //logging for debbuging
+            // console.log(`joinRoom: User: ${clientId} joined "${roomTitle}" as ${role}`) //logging for debbuging
 
         })
 
@@ -48,7 +48,7 @@ const socketHandler = (io) => {
                 const userCount = usersInRoom.length
                 io.to(roomId).emit('updateStudentCounter', { roomId, userCount })
 
-                console.log(`leaveRoom: leaving room ${roomId}`) //logging for debugging
+                // console.log(`leaveRoom: leaving room ${roomId}`) //logging for debugging
                 socket.emit("message", `You left the room`) // emit to self
                 socket.emit('roleAssigned', { roomId: null, role: null }) // update Role
                 // Leave the room

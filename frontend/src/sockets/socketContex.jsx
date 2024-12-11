@@ -20,7 +20,7 @@ export const SocketProvider = ({ children }) => {
             })
         })
         socket.on('roleAssigned', (roleData) => {
-            console.log(roleData)
+            // console.log(roleData)
             setRole(roleData.role)
             setRoomId(roleData.roomId)
         })
