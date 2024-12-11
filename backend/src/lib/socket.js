@@ -54,7 +54,11 @@ const socketHandler = (io) => {
                 // Leave the room
                 socket.leave(roomId);
             }
-        });
+        })
+
+        socket.on('codeUpdate', (newCode, roomId) => {
+            socket.to(roomId).emit('codeUpdate', newCode)
+        })
 
         // Handle user disconnect
         socket.on('disconnect', () => {

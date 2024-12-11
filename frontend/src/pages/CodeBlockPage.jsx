@@ -4,6 +4,7 @@ import { blockService } from "../services/blockService.js";
 
 import CodeEditor from "../components/CodeEditor";
 import CodeOutput from "../components/CodeOutput.jsx";
+import { socket } from "../sockets/client.js";
 
 export default function CodeBlockPage() {
     const { id } = useParams();
@@ -19,6 +20,15 @@ export default function CodeBlockPage() {
             })
     }, [id]);
 
+    useEffect(() => {
+        socket.on('codeUpdate', (updatedCode) => {
+            setCode(updatedCode)
+        })
+        return () => {
+            socket.off('codeUpdate')
+        }
+    }, []);
+
 
     const handleSubmit = async () => {
         const response = await fetch(blockService.executeRequest(code));
@@ -32,6 +42,10 @@ export default function CodeBlockPage() {
         }
     }
 
+    const handleCodeChange = (newCode, roomId) => {
+        socket.emit('codeUpdate', newCode, roomId)
+        setCode(newCode)
+    }
 
     return (
         <div className="page code-block-page">
@@ -40,7 +54,7 @@ export default function CodeBlockPage() {
                 {codeBlock?.description}
             </p>
             <div className="excerise-container">
-                <CodeEditor code={code} setCode={setCode} />
+                <CodeEditor code={code} setCode={setCode} handleCodeChange={handleCodeChange} />
                 <CodeOutput output={output} />
             </div>
             <button type="submit" onClick={handleSubmit} className="submit-btn">Run Code</button>
