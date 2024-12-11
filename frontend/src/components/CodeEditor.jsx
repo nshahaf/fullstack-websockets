@@ -1,8 +1,10 @@
 import Editor from '@monaco-editor/react';
+import { useSocket } from '../hooks/useSocket';
 
 export default function CodeEditor({ code, setCode }) {
+    const { role } = useSocket()
 
-
+    const isReadOnly = role === 'Mentor';
     return (
         <div className="code-editor">
             <Editor
@@ -17,7 +19,7 @@ export default function CodeEditor({ code, setCode }) {
                         enabled: false
                     },
                     scrollBeyondLastLine: false,
-                    readOnly: false,
+                    readOnly: isReadOnly,
                 }}
             />
         </div>
