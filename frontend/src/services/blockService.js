@@ -52,17 +52,17 @@ async function deleteCodeBlock(id) {
 
 function normalizeCode(code) {
   // Remove single-line comments
-  let withoutSingleLine = code.replace(/\/\/.*$/gm, '');
+  let withoutSingleLine = code.replace(/\/\/.*$/gm, '')
 
   // Remove multi-line comments
-  let withoutMultiLine = withoutSingleLine.replace(/\/\*[\s\S]*?\*\//g, '');
+  let withoutMultiLine = withoutSingleLine.replace(/\/\*[\s\S]*?\*\//g, '')
 
-  // Remove semicolons at the end of lines
-  let withoutSemicolons = withoutMultiLine.replace(/;\s*/g, '');
+  // add semicolons at the end of lines
+  let withoutSemicolons = withoutMultiLine.replace(/;\s*/g, '')
 
   // Remove all newlines and extra spaces
   let normalizedCode = withoutSemicolons
-    .replace(/\s+/g, ' ') // Replace multiple spaces, tabs, or newlines with a single space
+    .replace(/\s+/g, '') // remove multiple spaces, tabs, or newlines
     .trim(); // Trim leading and trailing spaces
   return normalizedCode;
 }

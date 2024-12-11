@@ -11,12 +11,15 @@ export default function CodeBlockPage() {
     const [codeBlock, setCodeBlock] = useState(null)
     const [code, setCode] = useState('');
     const [output, setOutput] = useState('');
+    const [solution, setSolution] = useState('')
+    const [isSolved, setIsSolved] = useState(false)
 
     useEffect(() => {
         blockService.getCodeBlock(id)
             .then(res => {
                 setCodeBlock(res)
                 setCode(res.codeTemplate)
+                setSolution(res.solution)
             })
     }, [id]);
 
@@ -27,7 +30,14 @@ export default function CodeBlockPage() {
         return () => {
             socket.off('codeUpdate')
         }
-    }, []);
+    }, [])
+
+    useEffect(() => {
+        if (code && solution) {
+            setIsSolved(() => blockService.validateNormalizedCode(code, solution))
+        }
+    }, [code, solution])
+
 
 
     const handleSubmit = async () => {
@@ -56,8 +66,10 @@ export default function CodeBlockPage() {
             <div className="excerise-container">
                 <CodeEditor code={code} setCode={setCode} handleCodeChange={handleCodeChange} />
                 <CodeOutput output={output} />
+                {/* <CodeOutput output={codeBlock.solution} /> */}
             </div>
             <button type="submit" onClick={handleSubmit} className="submit-btn">Run Code</button>
+            {isSolved && <img src="/smiley.png" className='big-smily-face' alt="smiley face"></img>}
         </div>
     )
 }
