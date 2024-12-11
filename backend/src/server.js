@@ -12,7 +12,6 @@ import logger from './middleware/logger.js';
 import { connectDatabase } from './lib/db.js';
 
 //routes
-import authRoutes from './api/auth/auth.route.js'
 import codeBlockRoutes from './api/codeBlock/codeBlock.route.js'
 import socketHandler from './lib/socket.js';
 
@@ -51,7 +50,6 @@ socketHandler(io)
 
 app.use(logger)
 
-app.use("/api/auth", authRoutes)
 app.use("/api/codeblocks", codeBlockRoutes)
 
 //unhandled routes

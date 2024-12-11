@@ -7,7 +7,7 @@ import { blockService } from './services/blockService.js'
 
 import './assets/styles/main.scss'
 import { useSocket } from './hooks/useSocket.js'
-import { socketActions, socketListeners } from './sockets/client.js'
+import { socketListeners } from './sockets/client.js'
 import { Toaster } from 'react-hot-toast';
 
 
@@ -35,7 +35,7 @@ function App() {
       socket.off(('roleAssigned', socketListeners.onRoleAssigned))
       socket.off('disconnect')
     }
-  }, []);
+  }, [socket]);
 
   return (
     <>
