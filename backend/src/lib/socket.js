@@ -38,9 +38,7 @@ const socketHandler = (io) => {
         // Leave room and clean up users
         socket.on('leaveRoom', ({ roomId }) => {
             if (roomUsers[roomId]) {
-
                 roomUsers[roomId] = roomUsers[roomId].filter(user => user.clientId !== clientId) // Remove user from the room's users list
-
                 console.log(`leaveRoom: leaving room ${roomId}`) //logging for debugging
                 socket.emit("message", `You left the room`) // emit to self
                 socket.emit('roleAssigned', { roomId: null, role: null }) // update Role

@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import { socketActions } from "../sockets/client.js";
+import { socket } from "../sockets/client.js";
 
 export default function LobbyPage({ codeBlocks = [] }) {
   const navigate = useNavigate();
 
   const handleRedirect = (blockId, blockTitle) => {
-    socketActions.joinRoom(blockId, blockTitle)
-    navigate(`/code-block/${blockId}`)
+    socket.emit('joinRoom', { roomId: blockId, roomTitle: blockTitle }),
+      navigate(`/code-block/${blockId}`)
   }
 
   return (

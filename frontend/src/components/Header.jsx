@@ -1,12 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import Role from "./Role";
-import { socketActions } from "../sockets/client";
+import { socket } from "../sockets/client";
+import { useSocket } from "../hooks/useSocket";
 
 export default function Header() {
   const navigate = useNavigate()
+  const { roomId, setRoomId, setRole } = useSocket()
 
   const handleRedirect = () => {
-    socketActions.leaveRoom()
+    socket.emit('leaveRoom', { roomId: roomId })
+    setRoomId(null)
+    setRole(null)
     navigate('/')
   }
 
