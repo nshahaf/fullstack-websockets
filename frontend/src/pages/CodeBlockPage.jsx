@@ -63,12 +63,12 @@ export default function CodeBlockPage() {
             <p className="description">
                 {codeBlock?.description}
             </p>
-            <div className="excerise-container">
-                <CodeEditor code={code} setCode={setCode} handleCodeChange={handleCodeChange} />
-                <CodeOutput output={output} />
-                {/* <CodeOutput output={codeBlock.solution} /> */}
-            </div>
+            <CodeEditor code={code} setCode={setCode} handleCodeChange={handleCodeChange} />
             <button type="submit" onClick={handleSubmit} className="submit-btn">Run Code</button>
+            <h2 className="console">Output</h2>
+            <CodeOutput output={output} />
+            <div className="excerise-container">
+            </div>
             {isSolved && <img src="/smiley.png" className='big-smily-face' alt="smiley face"></img>}
         </div>
     )

@@ -20,6 +20,7 @@ export default function CodeEditor({ code, handleCodeChange }) {
                 value={code}
                 onChange={(val) => onChange(val)}
                 options={{
+                    wordWrap: true,
                     minimap: {
                         enabled: false
                     },
