@@ -13,7 +13,7 @@ const clientId = getClientId()
 
 // const userState = { roomId: null, role: null }
 
-const socket = io('http://localhost:3000', {
+const socket = io(import.meta.env.VITE_SOCKET_BASE_URL, {
     auth: {
         clientId: clientId
     },

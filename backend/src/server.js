@@ -40,7 +40,8 @@ app.use(express.json())
 
 // Set up CORS for Express
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(join(__dirname, '../public')))
+  const buildPath = join(__dirname, '../public')
+  app.use(express.static(buildPath))
 } else {
   app.use(cors(corsOptions))
 }
@@ -52,11 +53,11 @@ app.use(logger)
 
 app.use("/api/codeblocks", codeBlockRoutes)
 
+
 //unhandled routes
 app.get('/**', (req, res) => {
-  res.sendFile(join(__dirname, '../../frontend/index.html'))
+  res.sendFile(join(__dirname, '../public/index.html'))
 })
-
 
 
 const PORT = process.env.PORT || 3000
