@@ -24,6 +24,8 @@ export const SocketProvider = ({ children }) => {
             setRole(roleData.role)
             setRoomId(roleData.roomId)
         })
+
+
         socket.on('disconnect', () => {
             socket.emit('leaveRoom', { roomId: roomId })
             setRole(null)

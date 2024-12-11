@@ -4,7 +4,7 @@ export default function Role() {
     const { role } = useSocket()
 
     return (
-        <li className='Role'>{role}</li>
+        role && <li className='Role'>{`: ${role}`}</li>
     )
 }
 

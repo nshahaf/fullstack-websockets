@@ -28,10 +28,14 @@ const socketHandler = (io) => {
 
             socket.join(roomId) // Add the user to the room
 
-            console.log(`joinRoom: User: ${clientId} joined "${roomTitle}" as ${role}`) //logging for debbuging
             socket.emit('message', `You joined "${roomTitle}" as ${role}`) //Notify the current user
             socket.to(roomId).emit('message', `${clientId} has joined as ${role}`) //Notify others in the room
+
+            const userCount = usersInRoom.length
+            io.to(roomId).emit('updateStudentCounter', { roomId, userCount }) // updated room users count to all clients in the room
+
             socket.emit('roleAssigned', { role, roomId }) //update role
+            console.log(`joinRoom: User: ${clientId} joined "${roomTitle}" as ${role}`) //logging for debbuging
 
         })
 
@@ -39,10 +43,14 @@ const socketHandler = (io) => {
         socket.on('leaveRoom', ({ roomId }) => {
             if (roomUsers[roomId]) {
                 roomUsers[roomId] = roomUsers[roomId].filter(user => user.clientId !== clientId) // Remove user from the room's users list
+
+                const usersInRoom = roomUsers[roomId]
+                const userCount = usersInRoom.length
+                io.to(roomId).emit('updateStudentCounter', { roomId, userCount })
+
                 console.log(`leaveRoom: leaving room ${roomId}`) //logging for debugging
                 socket.emit("message", `You left the room`) // emit to self
                 socket.emit('roleAssigned', { roomId: null, role: null }) // update Role
-
                 // Leave the room
                 socket.leave(roomId);
             }
