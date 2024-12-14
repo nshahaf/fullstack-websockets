@@ -16,7 +16,7 @@
     .code-editor {
         width: 100%;
         min-height: 400px;
-        flex-grow: 1;
+        flex-shrink: 0;
     }
 
     .console {

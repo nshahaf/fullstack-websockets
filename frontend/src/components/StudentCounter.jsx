@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { socket } from "../sockets/client";
+import { useSocket } from "../hooks/useSocket"
 
 export default function StudentCounter() {
     const [userCount, setUserCount] = useState(0)
+    const {roomId} = useSocket()
+    
 
 
     useEffect(() => {
@@ -16,7 +19,7 @@ export default function StudentCounter() {
         }
     }, []);
 
-    if (userCount <= 1) return ''
+    if (userCount <= 1 || !roomId) return ''
     return (
         <span>Students: {userCount - 1}</span>
     )

@@ -25,7 +25,7 @@ export default function CodeEditor({ code, handleCodeChange }) {
                         enabled: false
                     },
                     scrollBeyondLastLine: false,
-                    readOnly: !isReadOnly,
+                    readOnly: isReadOnly,
                 }}
             />
         </div>
