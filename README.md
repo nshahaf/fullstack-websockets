@@ -1,5 +1,4 @@
-# Moveo home assignment
- 
+
 ## Objective
 **The goal is to create a collaborative online coding platform with real-time features, including:**
 
